@@ -17,6 +17,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+  if (user && user.role === "USER" && url.pathname.includes("/dashboard")) {
+    return NextResponse.redirect(new URL("/event", request.url));
+  }
+
   if (!session && url.pathname.includes("/(protected)")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

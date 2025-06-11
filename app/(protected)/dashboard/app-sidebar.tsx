@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import {
-    LayoutDashboard,                                                           
+    LayoutDashboard,
     CalendarCheck,
     LogOut,
     User
@@ -33,12 +33,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { signOut } from "next-auth/react"
 
 interface AppSideBarProps {
-    session: {
-        email?: string | null,
-        id?: string | null,
-        name?: string | null,
-        role?: string | null
-    } | null | undefined
+    session?: {
+        email?: string | null;
+        id?: string | null;
+        name?: string | null;
+        role: string;
+    };
 }
 
 const items = [
@@ -46,16 +46,19 @@ const items = [
         title: "Dashboard",
         url: "/dashboard",
         icon: LayoutDashboard,
+        roles: ["ADMIN", "EVENT_OWNER"]
     },
     {
         title: "Events",
         url: "/event",
         icon: CalendarCheck,
+        roles: "all"
     },
     {
         title: "Users",
         url: "/users",
         icon: User,
+        roles: ["ADMIN"]
     },
 ];
 
@@ -85,21 +88,28 @@ const AppSideBar = ({ session }: AppSideBarProps) => {
                     <SidebarGroup>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {items.map((item) => (
-                                    <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton asChild>
-                                            <Link
-                                                href={item.url}
-                                                className={cn(
-                                                    pathname === item.url && "!bg-background !text-white"
-                                                )}
-                                            >
-                                                <item.icon />
-                                                <span>{item.title}</span>
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                ))}
+                                {items.map((item) => {
+                                    const canAccess = item.roles === "all" ||
+                                        (session?.role && item.roles.includes(session.role));
+
+                                    if (!canAccess) return null;
+
+                                    return (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton asChild>
+                                                <Link
+                                                    href={item.url}
+                                                    className={cn(
+                                                        pathname === item.url && "!bg-background !text-white"
+                                                    )}
+                                                >
+                                                    <item.icon />
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    );
+                                })}
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>
