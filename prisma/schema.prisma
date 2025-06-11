@@ -15,6 +15,7 @@ model User {
   role      Role     @default(EVENT_OWNER)
   events    Event[]  @relation("EventOwner")
   createdAt DateTime @default(now())
+  Event     Event[]  @relation("UserEvent")
 }
 
 enum Role {
@@ -24,16 +25,19 @@ enum Role {
 }
 
 model Event {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  location    String
-  dateTime    DateTime
-  ownerId     String
-  owner       User     @relation("EventOwner", fields: [ownerId], references: [id])
-  rsvps       RSVP[]
-  publicUrl   String   @unique
-  createdAt   DateTime @default(now())
+  id           String   @id @default(cuid())
+  title        String
+  dateTime     DateTime
+  location     String
+  description  String
+  customFields Json?
+  ownerId      String
+  owner        User     @relation("EventOwner", fields: [ownerId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User?    @relation("UserEvent", fields: [userId], references: [id])
+  userId       String?
+  RSVP         RSVP[]
 }
 
 model RSVP {

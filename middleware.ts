@@ -2,20 +2,13 @@ import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
-  matcher: [
-    "/app/:path*",
-    "/login",
-    "/register",
-    "/",
-  ],
+  matcher: ["/:path*", "/login", "/register", "/"],
 };
 
 export async function middleware(request: NextRequest) {
   const session = await auth();
   const url = request.nextUrl;
   const user = session?.user;
-
-  console.log(user);
 
   if (
     user &&
@@ -24,8 +17,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (!session && url.pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/signin", request.url));
+  if (!session && url.pathname.includes("/(protected)")) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
   return NextResponse.next();
 }
