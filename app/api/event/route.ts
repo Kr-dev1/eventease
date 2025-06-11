@@ -15,16 +15,27 @@ export async function POST(req: Request) {
       );
     }
 
+    if (session.user.role === "USER" || session.user.role === "STAFF") {
+      return Response.json(
+        {
+          success: false,
+          message:
+            "User dosent meet the role requirements to perform this action",
+        },
+        { status: 400 }
+      );
+    }
+
     const body = await req.json();
 
     const event = await prisma.event.create({
       data: {
-        title: body.title,
-        dateTime: new Date(body.dateTime),
-        location: body.location,
-        description: body.description,
+        title: body.data.title,
+        dateTime: new Date(body.data.dateTime),
+        location: body.data.location,
+        description: body.data.description,
         ownerId: session.user.id,
-        customFields: body.customFields,
+        customFields: body.data.customFields,
       },
     });
 
