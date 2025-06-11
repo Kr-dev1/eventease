@@ -17,13 +17,34 @@ import { signUpSchema } from "@/schema/signUpSchema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
+import axios from 'axios'
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SignupForm() {
-  const handleSubmit = (data: z.infer<typeof signUpSchema>) => {
-    console.log(data);
+  const router = useRouter()
+  const handleSubmit = async (data: z.infer<typeof signUpSchema>) => {
+    try {
+      const response = await axios.post('/api/auth/signup', data);
 
-    console.log("Form submitted");
-  };
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        router.replace('/login');
+      }
+    } catch (err: any) {
+      if (err.response) {
+        const { status, data } = err.response;
+        if (status === 409) {
+          toast.error(data.message || "User already exists");
+          return;
+        }
+        toast.error(data.message || "Something went wrong");
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    }
+  }
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
