@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma/prisma";
 import { signUpSchema } from "@/schema/signUpSchema";
+import bcrypt from "bcryptjs";
 
 export const POST = async (req: Request) => {
   try {
@@ -38,10 +39,7 @@ export const POST = async (req: Request) => {
     }
 
     // Hash password
-    const hashedPassword = await Bun.password.hash(password, {
-      algorithm: "bcrypt",
-      cost: 12,
-    });
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     // Create user
     const newUser = await prisma.user.create({
@@ -50,14 +48,9 @@ export const POST = async (req: Request) => {
         password: hashedPassword,
         name,
       },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        createdAt: true,
-        role: true,
-      },
     });
+
+    console.log(newUser);
 
     return Response.json(
       {
@@ -68,7 +61,6 @@ export const POST = async (req: Request) => {
       { status: 201 }
     );
   } catch (error) {
-    console.error("User registration error:", error);
     return Response.json(
       {
         success: false,
