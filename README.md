@@ -81,10 +81,13 @@ public/             # Static assets
 
 ## Accounts to check
 
-USER - user@example.com
-ADMIN - admin@example.com
-OWNER - owner@example.com
-STAFF - staff@example.com
+```bash
+- USER - user@example.com
+- ADMIN - admin@example.com
+- OWNER - owner@example.com
+- STAFF - staff@example.com
+Pass    - Test@123
+```
 
 ## 🙌 Acknowledgements
 
