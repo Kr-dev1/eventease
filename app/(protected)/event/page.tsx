@@ -1,36 +1,9 @@
-import { auth } from "@/auth"
 import DeleteModalButton from "@/components/dialogs/deleteDialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { prisma } from "@/lib/prisma/prisma"
 import { CalendarDaysIcon, LocateIcon } from "lucide-react"
 import Link from "next/link"
-import { redirect } from "next/navigation"
-
-const getEvents = async () => {
-    const session = await auth()
-    const user = session?.user.id
-    if (!session || !session?.user) {
-        redirect('/login')
-    }
-
-    const events =
-        (session.user.role !== "USER" && session.user.role !== "ADMIN") ?
-            await prisma.event.findMany({
-                where: {
-                    ownerId: user
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            })
-            : await prisma.event.findMany({
-                orderBy: {
-                    createdAt: 'desc'
-                },
-            });
-    return { events, session }
-}
+import { getEvents } from "./action"
 
 const EmptyState = () => (
     <div className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed rounded-lg">

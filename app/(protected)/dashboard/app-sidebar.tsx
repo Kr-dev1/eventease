@@ -46,7 +46,7 @@ const items = [
         title: "Dashboard",
         url: "/dashboard",
         icon: LayoutDashboard,
-        roles: ["ADMIN", "EVENT_OWNER"]
+        roles: ["ADMIN", "OWNER",]
     },
     {
         title: "Events",
@@ -73,14 +73,7 @@ const AppSideBar = ({ session }: AppSideBarProps) => {
     return (
         <Sidebar collapsible="icon" variant="floating" className="">
             <SidebarHeader>
-                <Image
-                    src={image}
-                    width={120}
-                    height={100}
-                    alt="Ask Repo Logo"
-                    priority
-                    className="w-auto h-auto"
-                />
+                <h1 className="text-xl font-bold">EventEase</h1>
             </SidebarHeader>
 
             <SidebarContent className="flex justify-between">
