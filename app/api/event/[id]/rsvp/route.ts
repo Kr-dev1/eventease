@@ -19,15 +19,16 @@ export async function POST(
       );
     }
 
-    const checkAlreadySubmitted = await prisma.rSVP.findMany({
+    const existing = await prisma.rSVP.findFirst({
       where: {
         email: body.data.email,
+        eventId: event.id,
       },
     });
 
-    if (checkAlreadySubmitted) {
+    if (existing) {
       return Response.json(
-        { success: false, message: "Already submitted" },
+        { success: false, message: "You have already RSVP'd to this event." },
         { status: 409 }
       );
     }
@@ -39,6 +40,13 @@ export async function POST(
         attending: body.data.attending,
         message: body.data.message,
         eventId: event.id,
+      },
+    });
+
+    const updatedEvent = await prisma.event.findUnique({
+      where: { id: event.id },
+      include: {
+        RSVP: true,
       },
     });
 

@@ -1,6 +1,6 @@
 import DeleteModalButton from "@/components/dialogs/deleteDialog"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { CalendarDaysIcon, LocateIcon } from "lucide-react"
 import Link from "next/link"
 import { getEvents } from "./action"
@@ -21,6 +21,7 @@ const EmptyState = () => (
 
 const Page = async () => {
     const { events, session } = await getEvents()
+
     return (
         <div className="container mx-auto p-3">
             <div className="flex justify-between items-center md:mt-12">
@@ -41,27 +42,46 @@ const Page = async () => {
                                     <CardContent className="p-6 space-y-4">
                                         <div className="space-y-2">
                                             <h3 className="text-lg font-medium">{event.title}</h3>
-                                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                                <CalendarDaysIcon className="w-4 h-4" />
-                                                <span>{event.dateTime instanceof Date ? event.dateTime.toLocaleString(undefined, { hour12: true, timeStyle: 'short', dateStyle: 'short' }) : event.dateTime}</span>
-                                                <LocateIcon className="w-4 h-4" />
-                                                <span>{event.location}</span>
+
+                                            <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
+                                                <div className="flex items-center gap-2">
+                                                    <CalendarDaysIcon className="w-4 h-4" />
+                                                    <span>
+                                                        {event.dateTime instanceof Date
+                                                            ? event.dateTime.toLocaleString(undefined, {
+                                                                hour12: true,
+                                                                timeStyle: "short",
+                                                                dateStyle: "short",
+                                                            })
+                                                            : event.dateTime}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <LocateIcon className="w-4 h-4" />
+                                                    <span
+                                                        className="truncate max-w-[200px]"
+                                                        title={event.location}
+                                                    >
+                                                        {event.location}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
+
                                         <p className="text-sm text-gray-500 dark:text-gray-400 break-words line-clamp-2">
                                             {event.description}
                                         </p>
                                     </CardContent>
                                 </Link>
-                                {session.user.role !== 'USER' &&
+
+                                {session.user.role !== "USER" && (
                                     <div className="px-6 pb-4 flex justify-end gap-2 mt-auto">
                                         <Link href={`/event/${event.id}/edit`}>
-                                            <Button variant='outline'>
-                                                Edit
-                                            </Button>
+                                            <Button variant="outline">Edit</Button>
                                         </Link>
                                         <DeleteModalButton eventId={event.id} />
-                                    </div>}
+                                    </div>
+                                )}
                             </Card>
                         </div>
                     ))

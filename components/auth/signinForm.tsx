@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signIn } from 'next-auth/react'
+import Link from "next/link";
 
 export default function SignInForm() {
     const router = useRouter()
@@ -91,6 +92,7 @@ export default function SignInForm() {
                         <BottomGradient />
                     </Button>
                 </form>
+                <p className="text-sm text-right">Don&apos;t have an account? <Link className="hover:underline hover:text-amber-100 text-blue-200" href='/register'>Register</Link></p>
             </Form>
         </div>
     );

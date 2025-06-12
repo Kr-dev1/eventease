@@ -31,6 +31,25 @@ export const getEvents = async () => {
   return { events, session };
 };
 
+export const getEvent = async (id: string) => {
+  const session = await auth();
+  if (!session || !session.user) {
+    redirect("/login");
+  }
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+    include: {
+      owner: true,
+      RSVP: true,
+    },
+  });
+  if (!event) {
+    redirect("/event");
+  }
+  return { event, session };
+};
+
 export async function deleteEvent(eventId: string) {
   await prisma.event.delete({
     where: { id: eventId },
