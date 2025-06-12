@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma/prisma";
 
-export async function POST(req: Request, params: any) {
-  const { id } = await params;
+export async function POST(req: Request, { params }: { params: { id: string } }) {
+  const { id } = params;
+  console.log(id);
+
   try {
     const body = await req.json();
-    console.log(body);
-
     const event = await prisma.event.findUnique({
       where: { id },
     });
@@ -31,7 +31,7 @@ export async function POST(req: Request, params: any) {
       );
     }
 
-    await prisma.rSVP.create({
+    const newRsvp = await prisma.rSVP.create({
       data: {
         name: `${body.data.firstName} ${body.data.lastName}`,
         email: body.data.email,
@@ -41,13 +41,12 @@ export async function POST(req: Request, params: any) {
       },
     });
 
-    const updatedEvent = await prisma.event.findUnique({
-      where: { id: event.id },
+    const updatedEvent = await prisma.event.findFirst({
+      where: { id },
       include: {
         RSVP: true,
       },
     });
-
     return Response.json(
       {
         success: true,
@@ -56,6 +55,8 @@ export async function POST(req: Request, params: any) {
       { status: 200 }
     );
   } catch (err) {
+    console.error(err);
+
     return Response.json(
       {
         success: true,

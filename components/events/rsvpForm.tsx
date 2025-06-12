@@ -56,14 +56,13 @@ export default function RsvpForm({ id }: RsvpFormProps) {
     });
 
     const onSubmit = async (data: z.infer<typeof rsvpSchema>) => {
-        console.log(data);
-
         setIsSubmitting(true);
         try {
-            const response = axios.post(`/api/event/${id}/rsvp`, { data })
-            toast.success(`RSVP received for ${data.firstName}!`);
-            form.reset();
-            setSubmitted(true)
+            const response = await axios.post(`/api/event/${id}/rsvp`, { data })
+            if (response.data.success) {
+                toast.success(`RSVP received for ${data.firstName}!`);
+                setSubmitted(true)
+            }
         } catch (error) {
             toast.error("Failed to submit RSVP.");
         } finally {
