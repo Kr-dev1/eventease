@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/prisma/prisma";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
-  console.log(id);
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
 
   try {
     const body = await req.json();

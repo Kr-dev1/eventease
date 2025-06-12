@@ -3,11 +3,11 @@ import { prisma } from "@/lib/prisma/prisma";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
-    const { id } = params;
+    const { id } = await params;
     if (!session || !session.user) {
       return Response.json(
         {
