@@ -72,9 +72,15 @@ const AppSideBar = ({ session }: AppSideBarProps) => {
 
     return (
         <Sidebar collapsible="icon" variant="floating" className="">
-            <SidebarHeader>
-                <h1 className="text-xl font-bold">EventEase</h1>
-            </SidebarHeader>
+            {open ?
+                <SidebarHeader>
+                    <h1 className="text-xl font-bold">EventEase</h1>
+                </SidebarHeader>
+                :
+                <SidebarHeader className="flex justify-center items-center">
+                    <h1 className="text-xl font-bold">EE</h1>
+                </SidebarHeader>
+            }
 
             <SidebarContent className="flex justify-between">
                 <div>
