@@ -46,4 +46,6 @@ model RSVP {
   eventId   String
   event     Event    @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
+  attending String
+  message   String
 }
