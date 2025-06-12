@@ -21,10 +21,6 @@ EventEase is a modern full-stack event management application built with **Next.
 - **Auth:** NextAuth.js
 - **Deployment:** Vercel
 
-## 📸 Screenshots
-
-*(Optional: Add screenshots or GIFs showcasing features)*
-
 ## 🛠️ Installation
 
 Clone the repo:
