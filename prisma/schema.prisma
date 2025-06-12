@@ -20,7 +20,7 @@ model User {
 enum Role {
   ADMIN
   STAFF
-  EVENT_OWNER
+  OWNER
   USER
 }
 

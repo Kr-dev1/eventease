@@ -27,15 +27,14 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-
     const event = await prisma.event.create({
       data: {
-        title: body.data.title,
-        dateTime: new Date(body.data.dateTime),
-        location: body.data.location,
-        description: body.data.description,
+        title: body.title,
+        dateTime: new Date(body.dateTime),
+        location: body.location,
+        description: body.description,
         ownerId: session.user.id,
-        customFields: body.data.customFields,
+        customFields: body.customFields,
       },
     });
 

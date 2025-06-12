@@ -47,6 +47,16 @@ const EventForm = ({ initialData, actionType }: EventFormProps) => {
     });
 
     const onSubmit = async (values: z.infer<typeof eventSchema>) => {
+        // Remove customFields with empty label and value before submitting
+        const filteredValues = {
+            ...values,
+            customFields: Array.isArray(values.customFields)
+                ? values.customFields.filter(
+                    (f) => f.label.trim() !== "" || f.value.trim() !== ""
+                )
+                : [],
+        };
+
         try {
             const url = actionType === "create"
                 ? "/api/event"
@@ -55,10 +65,7 @@ const EventForm = ({ initialData, actionType }: EventFormProps) => {
             const response = await axios({
                 method: actionType === "create" ? "POST" : "PATCH",
                 url: url,
-                data: values,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                data: filteredValues,
             });
 
             if (response.data) {
