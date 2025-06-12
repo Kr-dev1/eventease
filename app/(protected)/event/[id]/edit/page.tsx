@@ -26,13 +26,14 @@ async function getEvent(eventId: string) {
     return { event, session };
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-    const { event } = await getEvent(params.id);
+export default async function Page({ params }: any) {
+    const { id } = await params
+    const { event } = await getEvent(id);
 
     return (
         <div className="container mx-auto p-6">
             <h1 className="text-2xl font-bold mb-8">Edit Event</h1>
-            <EventForm 
+            <EventForm
                 initialData={event}
                 actionType="edit"
             />
