@@ -20,6 +20,7 @@ import { Button } from "../ui/button";
 import axios from 'axios'
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignupForm() {
   const router = useRouter()
@@ -108,6 +109,7 @@ export default function SignupForm() {
             <BottomGradient />
           </Button>
         </form>
+        <p className="text-sm text-right">Already have an account? <Link className="hover:underline hover:text-amber-100 text-blue-200" href='/login'>Login</Link></p>
       </Form>
     </div>
   );

@@ -38,6 +38,13 @@ export async function POST(req: Request) {
       },
     });
 
+    const updatedEvent = await prisma.event.update({
+      where: { id: event.id },
+      data: {
+        rsvpUrl: `${process.env.BASE_URL}/event/${event.id}`,
+      },
+    });
+
     return Response.json({
       success: true,
       data: event,

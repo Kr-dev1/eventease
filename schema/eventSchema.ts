@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const eventSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(12, "Title can be 12 character long"),
   dateTime: z
     .string({
       required_error: "Please select a date and time",

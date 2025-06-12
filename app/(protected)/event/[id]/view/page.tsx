@@ -1,37 +1,16 @@
 import { auth } from "@/auth";
 import DeleteModalButton from "@/components/dialogs/deleteDialog";
+import { AttendeeTable } from "@/components/events/attendeeTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { prisma } from "@/lib/prisma/prisma";
 import { CalendarDaysIcon, Clock, MapPin, User } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { getEvent } from "../../action";
+import CopyRsvpUrl from "@/components/events/copyRsvpUrl";
+import { NoDataPlaceholder } from "@/components/placeholder";
 
-const getEvent = async (id: string) => {
-    const session = await auth();
-    if (!session || !session.user) {
-        redirect("/login");
-    }
-
-    const event = await prisma.event.findUnique({
-        where: { id },
-        include: {
-            owner: true,
-        },
-    });
-    if (!event) {
-        redirect("/event");
-    }
-    return { event, session };
-
-};
-
-export default async function Page({
-    params,
-}: {
-    params: { id: string };
-}) {
-    const { id } = params
+export default async function Page({ params }: any) {
+    const { id } = await params;
     const { event, session } = await getEvent(id);
 
     return (
@@ -54,6 +33,9 @@ export default async function Page({
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-3xl font-bold">{event.title}</CardTitle>
+                        <div className="mt-4">
+                            <CopyRsvpUrl url={event.rsvpUrl ?? ""} />
+                        </div>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -84,14 +66,38 @@ export default async function Page({
                             <h3 className="text-xl font-semibold mb-2">About this event</h3>
                             <p className="text-gray-500 whitespace-pre-wrap">{event.description}</p>
                         </div>
-                        {
-                            Array.isArray(event.customFields) && event.customFields.map((field: any, idx: number) => (
+
+                        {Array.isArray(event.customFields) &&
+                            event.customFields.map((field: any, idx: number) => (
                                 <div key={idx} className="mt-6">
                                     <h3 className="text-xl font-semibold mb-2">{field.label}</h3>
                                     <p className="text-gray-500 whitespace-pre-wrap">{field.value}</p>
                                 </div>
-                            ))
-                        }
+                            ))}
+                    </CardContent>
+                </Card>
+
+                <Card className="mt-6 p-4">
+                    <CardHeader>
+                        <CardTitle className="text-lg font-bold">Attendee Details</CardTitle>
+                    </CardHeader>
+
+                    <CardContent>
+                        {session.user.role !== "USER" ? (
+                            event.RSVP.length > 0 ? (
+                                <AttendeeTable
+                                    data={event.RSVP.map((rsvp: any) => ({
+                                        ...rsvp,
+                                        createdAt:
+                                            rsvp.createdAt instanceof Date
+                                                ? rsvp.createdAt.toISOString()
+                                                : rsvp.createdAt,
+                                    }))}
+                                />
+                            ) : (
+                                <NoDataPlaceholder message="No attendees yet for this event." />
+                            )
+                        ) : null}
                     </CardContent>
                 </Card>
             </div>

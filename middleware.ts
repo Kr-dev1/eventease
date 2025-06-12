@@ -7,22 +7,27 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const session = await auth();
-  const url = request.nextUrl;
   const user = session?.user;
+  const url = request.nextUrl;
 
-  if (
-    user &&
-    (url.pathname.includes("/login") || url.pathname.includes("/register"))
-  ) {
+  const isAuthPage = url.pathname === "/login" || url.pathname === "/register";
+
+  const isProtectedRoute = url.pathname.startsWith("/dashboard");
+
+  // Block logged-in users from accessing auth pages
+  if (user && isAuthPage) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (user && user.role === "USER" && url.pathname.includes("/dashboard")) {
+  // Redirect unauthenticated users trying to access protected content
+  if (!user && (isProtectedRoute || url.pathname === "/")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Redirect basic users (non-staff/admin) away from /dashboard
+  if (user?.role === "USER" && isProtectedRoute) {
     return NextResponse.redirect(new URL("/event", request.url));
   }
 
-  if (!session && url.pathname.includes("/(protected)")) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
   return NextResponse.next();
 }
