@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventEase 🎉
 
-## Getting Started
+EventEase is a modern full-stack event management application built with **Next.js 15**, **Prisma**, **Tailwind CSS**, and **PostgreSQL**. It allows users to create, manage, and RSVP to events with a smooth and intuitive interface.
 
-First, run the development server:
+## 🚀 Features
+
+- 🔐 Authentication using NextAuth
+- 📅 Create and manage events
+- 📨 Invite attendees with a public RSVP link
+- ✅ RSVP to events without login
+- 📊 Dashboard for viewing created events
+- 🌗 Dark mode support
+- ⚡ Fast and modern UI with Tailwind CSS
+
+## 🧱 Tech Stack
+
+- **Frontend:** React, Next.js 15 (App Router)
+- **Styling:** Tailwind CSS, ShadCN UI
+- **Backend:** Next.js API routes, Prisma ORM
+- **Database:** PostgreSQL
+- **Auth:** NextAuth.js
+- **Deployment:** Vercel
+
+## 📸 Screenshots
+
+*(Optional: Add screenshots or GIFs showcasing features)*
+
+## 🛠️ Installation
+
+Clone the repo:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Kr-dev1/eventease.git
+cd eventease
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+bun install
+# or
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Set up your `.env` file (see `.env.example` for required variables):
 
-## Learn More
+```env
+DATABASE_URL=your_postgres_connection_url
+NEXTAUTH_SECRET=your_secret_key
+NEXTAUTH_URL=http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run the development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+bun dev
+# or
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set up your database:
 
-## Deploy on Vercel
+```bash
+npx prisma migrate dev --name init
+npx prisma generate
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+(Currently no testing setup, but you can integrate tools like Jest or Playwright.)
+
+## 📂 Folder Structure
+
+```bash
+app/                # App Router-based pages and layouts
+components/         # Reusable UI components
+lib/                # Utility functions, auth, prisma client
+schema/             # Zod validation schemas
+public/             # Static assets
+```
+
+## Accounts to check
+
+USER - user@example.com
+ADMIN - admin@example.com
+OWNER - owner@example.com
+STAFF - staff@example.com
+
+## 🙌 Acknowledgements
+
+- [Next.js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [ShadCN UI](https://ui.shadcn.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vercel](https://vercel.com/)
+
+## 📬 Contact
+
+Built with ❤️ by [Kasturi Rangan](https://www.linkedin.com/in/-kasturirangan/)  
+📧 kasturirangan.dev@gmail.com  
+🌐 [Portfolio](https://kasturirangan.netlify.app)
+
+---
+
+Feel free to fork this project and customize it for your own event platform!
