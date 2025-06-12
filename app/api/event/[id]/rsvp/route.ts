@@ -1,15 +1,13 @@
 import { prisma } from "@/lib/prisma/prisma";
 
-export async function POST(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: Request, params: any) {
+  const { id } = await params;
   try {
     const body = await req.json();
     console.log(body);
 
     const event = await prisma.event.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!event) {
