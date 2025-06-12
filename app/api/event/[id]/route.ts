@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma/prisma";
 
-export async function PATCH(req: Request, context: { params: { id: string } }) {
+export async function PATCH(req: Request, params: any) {
   try {
-    const id = await context.params.id;
+    const { id } = await params;
     const session = await auth();
 
     if (!session || !session.user) {
