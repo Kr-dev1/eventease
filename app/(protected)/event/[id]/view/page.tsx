@@ -76,15 +76,14 @@ export default async function Page({ params }: any) {
                             ))}
                     </CardContent>
                 </Card>
+                {session.user.role !== "USER" ? (
+                    <Card className="mt-6 p-4">
+                        <CardHeader>
+                            <CardTitle className="text-lg font-bold">Attendee Details</CardTitle>
+                        </CardHeader>
 
-                <Card className="mt-6 p-4">
-                    <CardHeader>
-                        <CardTitle className="text-lg font-bold">Attendee Details</CardTitle>
-                    </CardHeader>
-
-                    <CardContent>
-                        {session.user.role !== "USER" ? (
-                            event.RSVP.length > 0 ? (
+                        <CardContent>
+                            {event.RSVP.length > 0 ? (
                                 <AttendeeTable
                                     data={event.RSVP.map((rsvp: any) => ({
                                         ...rsvp,
@@ -96,10 +95,11 @@ export default async function Page({ params }: any) {
                                 />
                             ) : (
                                 <NoDataPlaceholder message="No attendees yet for this event." />
-                            )
-                        ) : null}
-                    </CardContent>
-                </Card>
+                            )}
+                        </CardContent>
+                    </Card>
+                ) : null}
+
             </div>
         </div>
     );
